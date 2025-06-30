@@ -380,6 +380,14 @@ async function constructNewFileContentV1(diffContent: string, originalContent: s
 		if (isReplaceBlockEnd(line)) {
 			// Finished one replace block
 
+			// Validate for identical search and replace content (no-op detection)
+			if (currentSearchContent.trimEnd() === currentReplaceContent.trimEnd()) {
+				throw new Error(
+					"The SEARCH and REPLACE blocks are identical, so the file content already matches the desired state.\n" +
+					"No changes will be made. If you intend to update the file, please modify the REPLACE block to reflect the desired changes."
+				)
+			}
+
 			// Store this replacement
 			replacements.push({
 				start: searchMatchIndex,
@@ -606,6 +614,15 @@ class NewFileContentConstructor {
 				this.tryFixReplaceBlock(pendingNonStandardLineLimit)
 				canWritependingNonStandardLines && (this.pendingNonStandardLines.length = 0)
 			}
+
+			// Validate for identical search and replace content (no-op detection)
+			if (this.currentSearchContent.trimEnd() === this.currentReplaceContent.trimEnd()) {
+				throw new Error(
+					"The SEARCH and REPLACE blocks are identical, so the file content already matches the desired state.\n" +
+					"No changes will be made. If you intend to update the file, please modify the REPLACE block to reflect the desired changes."
+				)
+			}
+
 			this.lastProcessedIndex = this.searchEndIndex
 			this.resetForNextBlock()
 		} else {
