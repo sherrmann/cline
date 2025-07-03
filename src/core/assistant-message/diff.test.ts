@@ -195,6 +195,40 @@ replaced
 +++++++ REPLACE`,
 			shouldThrow: true,
 		},
+		{
+			name: "identical search and replace blocks",
+			original: "line1\nline2\nline3",
+			diff: `------- SEARCH
+line2
+=======
+line2
++++++++ REPLACE`,
+			shouldThrow: true,
+		},
+		{
+			name: "identical multi-line search and replace blocks",
+			original: "line1\nline2\nline3\nline4",
+			diff: `------- SEARCH
+line2
+line3
+=======
+line2
+line3
++++++++ REPLACE`,
+			shouldThrow: true,
+		},
+		{
+			name: "identical search and replace with trailing newlines",
+			original: "line1\nline2\nline3",
+			diff: `------- SEARCH
+line2
+
+=======
+line2
+
++++++++ REPLACE`,
+			shouldThrow: true,
+		},
 	]
 	//.filter(({name}) => name === "multiple ordered replacements")
 	//.filter(({name}) => name === "delete then replace")
