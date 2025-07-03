@@ -229,6 +229,26 @@ line2
 +++++++ REPLACE`,
 			shouldThrow: true,
 		},
+		{
+			name: "search and replace with different whitespace (should NOT be identical)",
+			original: "line1\nline2\nline3",
+			diff: `------- SEARCH
+line2
+=======
+line2 
++++++++ REPLACE`,
+			expected: "line1\nline2 \nline3",
+		},
+		{
+			name: "search and replace with different indentation (should NOT be identical)",
+			original: "line1\n    line2\nline3",
+			diff: `------- SEARCH
+    line2
+=======
+	line2
++++++++ REPLACE`,
+			expected: "line1\n\tline2\nline3",
+		},
 	]
 	//.filter(({name}) => name === "multiple ordered replacements")
 	//.filter(({name}) => name === "delete then replace")
