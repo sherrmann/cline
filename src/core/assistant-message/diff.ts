@@ -384,6 +384,11 @@ async function constructNewFileContentV1(diffContent: string, originalContent: s
 				throw new Error(`The SEARCH block:\n${currentSearchContent.trimEnd()}\n...is malformatted.`)
 			}
 
+			// Check if SEARCH and REPLACE blocks are identical
+			if (currentSearchContent === currentReplaceContent) {
+				throw new Error("The SEARCH and REPLACE blocks are identical, so the file content already matches the desired state. No changes will be made. If you intend to update the file, please modify the REPLACE block to reflect the desired changes.")
+			}
+
 			// Store this replacement
 			replacements.push({
 				start: searchMatchIndex,
@@ -610,6 +615,12 @@ class NewFileContentConstructor {
 				this.tryFixReplaceBlock(pendingNonStandardLineLimit)
 				canWritependingNonStandardLines && (this.pendingNonStandardLines.length = 0)
 			}
+			
+			// Check if SEARCH and REPLACE blocks are identical
+			if (this.currentSearchContent === this.currentReplaceContent) {
+				throw new Error("The SEARCH and REPLACE blocks are identical, so the file content already matches the desired state. No changes will be made. If you intend to update the file, please modify the REPLACE block to reflect the desired changes.")
+			}
+			
 			this.lastProcessedIndex = this.searchEndIndex
 			this.resetForNextBlock()
 		} else {
